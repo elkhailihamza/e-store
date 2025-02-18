@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: payment-service
+  config:
+    import: optional:configserver:http://localhost:8888
+
+  # Once done, put datasource and jpa in config server as 'user-service.yml' inside src/resources/configurations
+  datasource:
+    url:
+    password:
+    username:
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
