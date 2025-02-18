@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: eurika-server
+server:
+  port: 8761
+eureka:
+  client:
+    allow-redirects: false
+    fetch-registry: false
+    register-with-eureka: false
