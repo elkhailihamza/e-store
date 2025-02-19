@@ -2,7 +2,9 @@ package org.project.stockservice.service.implementation;
 
 import lombok.RequiredArgsConstructor;
 import org.project.stockservice.dto.ProduitDTO;
+import org.project.stockservice.dto.StockDTO;
 import org.project.stockservice.dto.mapper.ProduitMapper;
+import org.project.stockservice.dto.mapper.StockMapper;
 import org.project.stockservice.entity.Produit;
 import org.project.stockservice.entity.Stock;
 import org.project.stockservice.exception.ItemConstraintViolationException;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProduitServiceImpl implements ProduitService {
     private final ProduitRepository produitRepository;
     private final ProduitMapper produitMapper;
+    private final StockMapper stockMapper;
 
     @Override
     public ProduitDTO checkStockAndReturn(ProduitDTO produitDTO) {
@@ -30,5 +33,12 @@ public class ProduitServiceImpl implements ProduitService {
         }
         // connect to user service and add productId to panier and grab user id with it, after that then return product to controller for frontend
         return produitMapper.toDTO(produit);
+    }
+
+    @Override
+    public ProduitDTO createProduct(ProduitDTO produitDTO, StockDTO stockDTO) {
+        Produit newProduit = produitMapper.toEntity(produitDTO);
+        newProduit.setStock(stockMapper.toEntity(stockDTO));
+        return produitMapper.toDTO(produitRepository.save(newProduit));
     }
 }
