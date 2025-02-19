@@ -1,15 +1,25 @@
+server:
+  port: 8083
+
 spring:
   application:
     name: payment-service
   config:
     import: optional:configserver:http://localhost:8888
 
-  # Once done, put datasource and jpa in config server as 'payment-service.yml' inside src/resources/configurations
   datasource:
-    url:
-    password:
-    username:
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:h2:mem:paymentdb
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
