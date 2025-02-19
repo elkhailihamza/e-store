@@ -32,4 +32,8 @@ public class Produit {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime dateAjout = LocalDateTime.now();
+
+    @OneToOne
+    @JoinColumn(name = "stock_id", nullable = false, unique = true)
+    private Stock stock;
 }

@@ -23,5 +23,8 @@ public class Stock {
     private int quantiteDisponible;
 
     @Column(nullable = false)
+    private int quantiteOriginal;
+
+    @Column(nullable = false)
     private int seuilMinimum;
 }
