@@ -1,4 +1,5 @@
 package org.project.userservice.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,6 +32,7 @@ public class Address {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
 }

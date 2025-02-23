@@ -1,5 +1,6 @@
 package org.project.userservice.security;
 
+import org.project.userservice.entity.User;
 import org.project.userservice.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,8 +17,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username)
-                .map(UserDetails.class::cast)
+        System.out.println("Tentative de connexion avec l'email : " + username);
+
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+
+        return new CustomUserDetails(user.getId(), user.getEmail(), user.getPassword(), user.getAuthorities());
     }
+
 }

@@ -8,11 +8,14 @@ import org.project.userservice.entity.User;
 import org.project.userservice.mapper.UserMapper;
 import org.project.userservice.repository.AddressRepository;
 import org.project.userservice.repository.UserRepository;
+import org.project.userservice.security.CustomUserDetails;
 import org.project.userservice.security.JwtService;
 import org.project.userservice.service.AuthService;
 import org.project.userservice.shared.exception.EmailAlreadyExist;
 import org.project.userservice.shared.exception.InvalidCredentialsException;
 import org.project.userservice.vm.AuthResponseVM;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -78,5 +81,16 @@ public class AuthServiceImpl implements AuthService {
         AuthResponseVM authResponseVM = userMapper.toDto(user);
         authResponseVM.setToken(token);
         return authResponseVM;
+    }
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof CustomUserDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails");
+        }
+        CustomUserDetails userDetails = (CustomUserDetails) principal;
+        Long userId = userDetails.getUserId();
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
     }
 }
