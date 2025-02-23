@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DiffGenerationConfig">
+    <option name="sourceModelValue" value="user-service:user-service" />
+    <option name="targetDbValue" value="ed1d7a12-1f1d-4e72-987a-8249a5299f8d__userdb_public" />
+  </component>
+</project>
