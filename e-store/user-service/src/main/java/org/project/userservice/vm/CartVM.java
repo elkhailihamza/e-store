@@ -10,6 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 public class CartVM {
     private Long id;
-    private UserVM USER;
+    private UserVM user;
     private List<CartItemVm> items;
 }

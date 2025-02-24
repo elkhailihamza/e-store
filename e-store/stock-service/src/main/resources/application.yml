@@ -6,9 +6,9 @@ spring:
 
   # Once done, put datasource and jpa in config server as 'stock-service.yml' inside src/resources/configurations
   datasource:
-    url: jdbc:postgresql://localhost:5432/stockDB
-    password: ;(.314Luiv./
-    username: root
+    url: jdbc:postgresql://localhost:5432/stockdb
+    password: latifa
+    username: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
