@@ -17,7 +17,7 @@ public class Produit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String nom;
 
     @Column(columnDefinition = "TEXT")
@@ -33,7 +33,7 @@ public class Produit {
     @Column(nullable = false, updatable = false)
     private LocalDateTime dateAjout = LocalDateTime.now();
 
-    @OneToOne
-    @JoinColumn(name = "stock_id", nullable = false, unique = true)
+    @OneToOne(mappedBy = "produit", cascade = CascadeType.ALL, orphanRemoval = true)
     private Stock stock;
 }
+

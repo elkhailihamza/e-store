@@ -16,7 +16,7 @@ public class Stock {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "produit_id", nullable = false, unique = true)
+    @JoinColumn(nullable = false)
     private Produit produit;
 
     @Column(nullable = false)
@@ -28,3 +28,4 @@ public class Stock {
     @Column(nullable = false)
     private int seuilMinimum;
 }
+

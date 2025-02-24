@@ -15,4 +15,5 @@ public class ProduitDTO {
     private String description;
     private double prix;
     private long categorieId;
+    private StockDTO stockDTO;
 }
