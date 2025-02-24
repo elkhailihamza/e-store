@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8222
 
 spring:
   application:
@@ -18,7 +18,10 @@ spring:
           uri: lb://PAYMENT-SERVICE
           predicates:
             - Path=/payments/**
-
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/auth/**
 
 management:
   endpoints:

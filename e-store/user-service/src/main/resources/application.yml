@@ -4,12 +4,13 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
 
-  # Once done, put datasource and jpa in config server as 'user-service.yml' inside src/resources/configurations
   datasource:
-    url:
-    password:
-    username:
+    url: jdbc:postgresql://localhost:5432/userdb
+    username: postgres
+    password: latifa
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
+  liquibase:
+    change-log: classpath:db.changelog/db.changelog-master.yaml
