@@ -29,7 +29,7 @@ public class ProduitController {
     }
 
     @GetMapping("/catalog")
-    public ResponseEntity<PagedResult<ProduitDTO>> getProduits(@RequestParam(name = "page", defaultValue = "1") int pageNum, @RequestParam(name = "by", defaultValue = "name") String filterBy) {
+    public ResponseEntity<PagedResult<ProduitDTO>> getProduits(@RequestParam(name = "page", defaultValue = "1") int pageNum, @RequestParam(name = "by", defaultValue = "nom") String filterBy) {
         return ResponseEntity.ok(produitService.getPagedProduits(pageNum, filterBy));
     }
 
