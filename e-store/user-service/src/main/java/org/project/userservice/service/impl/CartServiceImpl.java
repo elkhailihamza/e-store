@@ -2,6 +2,7 @@ package org.project.userservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.project.userservice.dto.CartDto;
+import org.project.userservice.dto.CartItemRequest;
 import org.project.userservice.entity.Cart;
 import org.project.userservice.entity.CartItem;
 import org.project.userservice.entity.User;
@@ -32,7 +33,7 @@ public class CartServiceImpl implements CartService {
     private final RestTemplate restTemplate;
     private final CartMapper cartMapper;
 
-    private static final String STOCK_SERVICE_URL = "http://stock-service/products/checkStock/";
+    private static final String STOCK_SERVICE_URL = "http://localhost:8222/products/p/add/{productId}";
 
     @Override
     public CartVM saveToCart(CartDto cartRequest) {
@@ -77,24 +78,26 @@ public class CartServiceImpl implements CartService {
     }
 
     private void checkAndAddCartItems(Cart cart, CartDto cartRequest) {
-        List<CartItem> validItems = new ArrayList<>();
-        for (CartItem item : cart.getItems()) {
+        List<CartItemRequest> validItems = new ArrayList<>();
+        for (CartItemRequest item : cartRequest.getItems()) {
             if (checkProductAvailability(item.getProduitId())) {
                 validItems.add(item);
             }
         }
-        cart.setItems(validItems);
+        cartRequest.setItems(validItems);
     }
 
     private boolean checkProductAvailability(Long produitId) {
         try {
-            String url = STOCK_SERVICE_URL + produitId;
-            Boolean response = restTemplate.getForObject(url, Boolean.class);
+            String url = "http://localhost:8222/products/p/add/" + produitId;
+            Boolean response = restTemplate.postForObject(url, null, Boolean.class);
             return response != null && response;
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la vérification du stock pour le produit ID: " + produitId, e);
         }
     }
+
+
 
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
