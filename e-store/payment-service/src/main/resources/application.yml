@@ -17,6 +17,17 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+
+paypal:
+  client-id: "AXZqFJYZLJlfaz7O5UX7S6nccHVy68SAJ2rNIAVS_dyVqcrkRIkelVxDKSBRaFlJFvoh_Jh07wAhQcM6"
+  client-secret: "EDgjElzwBMHD4w2K8KimKy2gtJ6EdZ7CuBZOf424xVqrIaBhqX2y0lSBn5di8yWDeVbl6a5lRgukz7Ii"
+  mode: sandbox
+
+
 eureka:
   client:
     serviceUrl:
