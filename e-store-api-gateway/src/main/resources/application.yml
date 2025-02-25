@@ -15,10 +15,9 @@ spring:
           lower-case-service-id: true
       routes:
         - id: payment-service
-          uri: lb://PAYMENT-SERVICE
+          uri: lb://payment-service
           predicates:
-            - Path=/payments/**
-
+            - Path=/payments/**, /transactions/**, /remboursements/**
 
 management:
   endpoints:
