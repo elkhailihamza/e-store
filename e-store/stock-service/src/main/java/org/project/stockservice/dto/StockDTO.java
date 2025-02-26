@@ -12,7 +12,7 @@ import org.project.stockservice.entity.Produit;
 @Builder
 public class StockDTO {
     private Long id;
-    private Produit produit;
+    private ProduitDTO produitDTO;
     private int quantiteDisponible;
     private int quantiteOriginal;
     private int seuilMinimum;
