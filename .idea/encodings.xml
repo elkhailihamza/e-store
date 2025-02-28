@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/e-store-api-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/e-store-config-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/e-store-discovery-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/e-store/payment-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/e-store/stock-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/e-store/user-service/src/main/java" charset="UTF-8" />
   </component>

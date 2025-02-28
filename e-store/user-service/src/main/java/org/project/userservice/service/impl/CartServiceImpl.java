@@ -14,6 +14,7 @@ import org.project.userservice.security.CustomUserDetails;
 import org.project.userservice.service.CartService;
 import org.project.userservice.shared.exception.ItemNotFoundException;
 import org.project.userservice.vm.CartVM;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,17 +35,21 @@ public class CartServiceImpl implements CartService {
     private final RestTemplate restTemplate;
     private final CartMapper cartMapper;
 
-    private static final String STOCK_SERVICE_URL = "http://localhost:8222/products/p/add/{productId}";
-
     @Override
     public CartVM saveToCart(CartDto cartRequest) {
         User user = getAuthenticatedUser();
-        Cart cart = cartRepository.findByUserId(user.getId()).orElse(new Cart(null, user, new ArrayList<>()));
+        Cart cart = cartRepository.findByUserId(user.getId())
+                .orElseGet(() -> {
+                    Cart newCart = new Cart(null, user, new ArrayList<>());
+                    return cartRepository.save(newCart);
+                });
+
         checkAndAddCartItems(cart, cartRequest);
 
         Cart savedCart = cartRepository.save(cart);
         return cartMapper.toVm(savedCart);
     }
+
 
     @Override
     public CartVM getCartById(Long id) {
@@ -78,20 +84,36 @@ public class CartServiceImpl implements CartService {
     }
 
     private void checkAndAddCartItems(Cart cart, CartDto cartRequest) {
-        List<CartItemRequest> validItems = new ArrayList<>();
-        for (CartItemRequest item : cartRequest.getItems()) {
-            if (checkProductAvailability(item.getProduitId())) {
-                validItems.add(item);
+        List<CartItem> items = new ArrayList<>();
+        for (CartItemRequest itemRequest : cartRequest.getItems()) {
+            if (checkProductAvailability(itemRequest.getProduitId())) {
+                CartItem cartItem = new CartItem();
+                cartItem.setCart(cart);
+                cartItem.setProduitId(itemRequest.getProduitId());
+                cartItem.setQuantite(itemRequest.getQuantite());
+                cartItem = cartItemRepository.save(cartItem);
+
+                items.add(cartItem);
             }
         }
-        cartRequest.setItems(validItems);
+        cart.getItems().addAll(items);
     }
+
 
     private boolean checkProductAvailability(Long produitId) {
         try {
             String url = "http://localhost:8222/products/p/add/" + produitId;
-            Boolean response = restTemplate.postForObject(url, null, Boolean.class);
-            return response != null && response;
+            ResponseEntity<Map> responseEntity = restTemplate.postForEntity(url, null, Map.class);
+            Map<String, Object> response = responseEntity.getBody();
+
+            if (response != null && response.containsKey("stockDTO")) {
+                Map<String, Object> stockDTO = (Map<String, Object>) response.get("stockDTO");
+                if (stockDTO != null && stockDTO.containsKey("quantiteDisponible")) {
+                    int quantiteDisponible = (int) stockDTO.get("quantiteDisponible");
+                    return quantiteDisponible > 0;
+                }
+            }
+            return false;
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la vérification du stock pour le produit ID: " + produitId, e);
         }
